@@ -1,16 +1,57 @@
+import { useModal } from "@/context/ModalContext";
+import { UseQueryResult } from "@tanstack/react-query";
+import axios from "axios";
 import React from "react";
+import toast from "react-hot-toast";
 
-const Form = () => {
+const Form = ({ refetch }: { refetch: UseQueryResult["refetch"] }) => {
+  const { setOpen } = useModal();
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(event.currentTarget);
+    const firstName = formData.get("firstName") as string;
+    const lastName = formData.get("lastName") as string;
+    const dateOfBirth = formData.get("dateOfBirth") as string;
+    const gender = formData.get("gender") as string;
+    const emailAddress = formData.get("emailAddress") as string;
+    const data = {
+      firstName,
+      lastName,
+      dateOfBirth,
+      gender,
+      emailAddress,
+    };
+
+    axios
+      .post("https://interview.canduit.org/api/users", data, {
+        headers: {
+          "x-api-key": "63cfb3f2-4e2f-47f9-9ae8-cc5af4cc30dd",
+          "Content-Type": "application/json",
+        },
+      })
+      .then((data) => {
+        if (data?.data?.success) {
+          toast.success("User created successfully!");
+          refetch();
+          form.reset();
+          setOpen(false);
+        }
+      })
+      .catch((error) => toast.error(error.message));
+  };
+
   return (
     <div className="flex flex-col w-full p-6 rounded-md sm:p-10">
-      <div className="mb-8 text-center">
-        <h1 className="my-2 text-3xl font-bold">Create new user</h1>
+      <div className="mb-4 md:mb-8 text-center">
+        <h1 className="my-1 lg:my-2 text-xl lg:text-3xl font-bold text-black">Create new user</h1>
         <p className="text-sm text-gray-400 dark:text-gray-600">
           Enter details to create user account.
         </p>
       </div>
-      <form className="space-y-6 text-black">
-        <div className="grid grid-cols-2 gap-6">
+      <form onSubmit={handleSubmit} className="space-y-6 text-black">
+        <div className="grid lg:grid-cols-2 gap-6">
           <div>
             <label
               htmlFor="firstName"
@@ -21,7 +62,6 @@ const Form = () => {
             <input
               type="text"
               name="firstName"
-              id="firstName"
               placeholder="Enter your first name"
               className="w-full px-3 py-2 border rounded-md border-gray-300 bg-gray-50"
             />
@@ -33,7 +73,6 @@ const Form = () => {
             <input
               type="text"
               name="lastName"
-              id="lastName"
               placeholder="Enter your last name"
               className="w-full px-3 py-2 border rounded-md border-gray-300 bg-gray-50"
             />
@@ -43,9 +82,8 @@ const Form = () => {
               Gender
             </label>
             <select
-              id="gender"
               name="gender"
-              className="w-full px-3 py-2 border rounded-md border-gray-300 bg-gray-50"
+              className="w-full px-3 py-2.5 border rounded-md border-gray-300 bg-gray-50"
             >
               <option value="">Select gender</option>
               <option value="male">Male</option>
@@ -58,9 +96,8 @@ const Form = () => {
             </label>
             <input
               type="date"
-              name="dob"
-              id="dob"
-              className="w-full px-3 py-2 border rounded-md border-gray-300 bg-gray-50"
+              name="dateOfBirth"
+              className="w-full px-3 py-2 border rounded-md border-gray-300 bg-gray-50 text-black"
             />
           </div>
           <div className="col-span-full">
@@ -69,8 +106,7 @@ const Form = () => {
             </label>
             <input
               type="email"
-              name="email"
-              id="email"
+              name="emailAddress"
               placeholder="Enter your email address"
               className="w-full px-3 py-2 border rounded-md border-gray-300 bg-gray-50"
             />
@@ -78,7 +114,7 @@ const Form = () => {
         </div>
 
         <button
-          type="button"
+          type="submit"
           className="w-full px-8 py-2 font-semibold rounded-md bg-[#1565C0] text-white cursor-pointer"
         >
           Create

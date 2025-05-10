@@ -6,15 +6,24 @@ import axios from "axios";
 import Pagination from "@/components/Pagination";
 import PaginationDetails from "@/components/PaginationDetails";
 import TableSkeleton from "@/components/TableSkeleton";
-import { IUser } from "@/types";
 import { Modal, ModalBody } from "@/components/Modal";
 import ModalTriggerButton from "@/components/ModalTriggerButton";
 import Form from "@/components/Form";
 
+interface IUser {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  gender: string;
+  emailAddress: string;
+  createdAt: string;
+}
+
 const UsersPage = () => {
   const [page, setPage] = useState(1);
 
-  const { data, isPending, isError, error } = useQuery({
+  const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["usersData", page],
     queryFn: async () => {
       const res = await axios(
@@ -57,33 +66,39 @@ const UsersPage = () => {
   return (
     <section className="p-3 sm:p-6 overflow-hidden space-y-4 flex flex-col h-full">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-[#1565C0]">User List</h2>
+        <h2 className="text-xl lg:text-2xl font-bold text-[#1565C0]">
+          User List
+        </h2>
         <Modal>
           <ModalTriggerButton title="Upload" icon={<FaPlus />} />
           <ModalBody>
-            <Form />
+            <Form refetch={refetch} />
           </ModalBody>
         </Modal>
       </div>
 
       <div className="overflow-x-auto rounded-lg border border-gray-300">
         <table className="w-full text-sm text-left">
-          <thead className="text-xs uppercase bg-[#F2F2F2]">
+          <thead className="text-xs uppercase bg-[#F2F2F2] text-black">
             <tr>
-              <th className="px-4 py-3">Name</th>
-              <th className="px-4 py-3">Email</th>
-              <th className="px-4 py-3">Gender</th>
-              <th className="px-4 py-3">Birth Date</th>
+              <th className="px-4 py-1 md:py-3">Name</th>
+              <th className="px-4 py-1 md:py-3">Email</th>
+              <th className="px-4 py-1 md:py-3">Gender</th>
+              <th className="px-4 py-1 md:py-3">Birth Date</th>
             </tr>
           </thead>
           <tbody>
             {isPending ? (
               <TableSkeleton />
             ) : data?.users?.length ? (
-              data.users.map((user: IUser) => (
+              data.users.map((user: IUser, idx: number) => (
                 <tr
                   key={user._id}
-                  className="border-b border-b-gray-300 hover:bg-gray-50 "
+                  className={
+                    data?.users?.length !== idx + 1
+                      ? "border-b border-b-gray-300"
+                      : ""
+                  }
                 >
                   <td className="px-4 py-3 font-medium capitalize">
                     {user.firstName} {user.lastName}

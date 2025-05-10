@@ -4,6 +4,7 @@ import { AppProvider, DashboardLayout, type Navigation } from "@toolpad/core";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ModalProvider } from "@/context/ModalContext";
+import { Toaster } from "react-hot-toast";
 
 const NAVIGATION: Navigation = [
   {
@@ -22,6 +23,7 @@ const Layout = ({
 
   return (
     <QueryClientProvider client={queryClient}>
+      <Toaster />
       <ModalProvider>
         <AppProvider navigation={NAVIGATION}>
           <DashboardLayout

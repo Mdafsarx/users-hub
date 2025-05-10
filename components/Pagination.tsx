@@ -9,7 +9,7 @@ interface IProps {
 
 const Pagination: React.FC<IProps> = ({ pages, handlePageChange, page }) => {
   return (
-    <>
+    <div className="flex justify-center md:justify-start">
       {pages ? (
         <MuiPagination
           count={pages}
@@ -20,7 +20,7 @@ const Pagination: React.FC<IProps> = ({ pages, handlePageChange, page }) => {
       ) : (
         <Skeleton width={200} height={40} />
       )}
-    </>
+    </div>
   );
 };
 
