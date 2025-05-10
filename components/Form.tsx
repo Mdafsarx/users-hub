@@ -45,7 +45,9 @@ const Form = ({ refetch }: { refetch: UseQueryResult["refetch"] }) => {
   return (
     <div className="flex flex-col w-full p-6 rounded-md sm:p-10">
       <div className="mb-4 md:mb-8 text-center">
-        <h1 className="my-1 lg:my-2 text-xl lg:text-3xl font-bold text-black">Create new user</h1>
+        <h1 className="my-1 lg:my-2 text-xl lg:text-3xl font-bold text-black">
+          Create new user
+        </h1>
         <p className="text-sm text-gray-400 dark:text-gray-600">
           Enter details to create user account.
         </p>
@@ -64,6 +66,7 @@ const Form = ({ refetch }: { refetch: UseQueryResult["refetch"] }) => {
               name="firstName"
               placeholder="Enter your first name"
               className="w-full px-3 py-2 border rounded-md border-gray-300 bg-gray-50"
+              required
             />
           </div>
           <div>
@@ -75,6 +78,7 @@ const Form = ({ refetch }: { refetch: UseQueryResult["refetch"] }) => {
               name="lastName"
               placeholder="Enter your last name"
               className="w-full px-3 py-2 border rounded-md border-gray-300 bg-gray-50"
+              required
             />
           </div>
           <div>
@@ -84,6 +88,7 @@ const Form = ({ refetch }: { refetch: UseQueryResult["refetch"] }) => {
             <select
               name="gender"
               className="w-full px-3 py-2.5 border rounded-md border-gray-300 bg-gray-50"
+              required
             >
               <option value="">Select gender</option>
               <option value="male">Male</option>
@@ -98,6 +103,7 @@ const Form = ({ refetch }: { refetch: UseQueryResult["refetch"] }) => {
               type="date"
               name="dateOfBirth"
               className="w-full px-3 py-2 border rounded-md border-gray-300 bg-gray-50 text-black"
+              required
             />
           </div>
           <div className="col-span-full">
@@ -109,6 +115,7 @@ const Form = ({ refetch }: { refetch: UseQueryResult["refetch"] }) => {
               name="emailAddress"
               placeholder="Enter your email address"
               className="w-full px-3 py-2 border rounded-md border-gray-300 bg-gray-50"
+              required
             />
           </div>
         </div>
